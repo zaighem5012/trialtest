@@ -132,7 +132,7 @@ export function SignUpPage() {
                                 <>
                                     <p class="text-red-500 text-xs text-left">{validattionMessage.repeat_email}
                                     </p>
-                                    <p class="text-red-500 text-xs text-left">This files is medatory
+                                    <p class="text-red-500 text-xs text-left">This field is mendatory
                                     </p>
                                 </>
                             )}

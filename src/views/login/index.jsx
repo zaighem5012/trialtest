@@ -1,9 +1,58 @@
-import React from "react"
+import React, { useState } from "react"
 import logo from "../../assets/Images/kiwify-green-logo.2af0e50.png"
+import { Link } from 'react-router-dom';
+
 export function LoginPage() {
+    const [validattionMessage, setValidationMessage] = useState({
+        email: "",
+        repeat_email: "",
+        password: ""
+    })
+    const [values, setvalues] = useState({
+        email: "",
+        repeat_email: "",
+        password: ""
+    })
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setvalues(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    const handleInputBlur = (event) => {
+        const { name, value } = event.target;
+        let errorMessage = '';
+
+        if (value.trim() === '') {
+            errorMessage = `${name === "repeat_email" ? "The two emails must be the same." + "\n" +"This field is mandatory" : "This field is mandatory"} `;
+        }
+
+        setValidationMessage((prevFormErrors) => ({
+            ...prevFormErrors,
+            [name]: errorMessage
+        }));
+    };
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(!values.email){
+            setValidationMessage(prev => ({
+                ...prev,
+                email:"This field is mandatory"
+            }))
+        }
+        if(!values.password){
+            setValidationMessage(prev => ({
+                ...prev,
+                password:"This field is mandatory"
+            }))
+        }
+    }
     return (
-        <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="w-full max-w-md space-y-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div>
                     <img
                         className="mx-auto h-12 w-auto"
@@ -15,29 +64,32 @@ export function LoginPage() {
                     </h2>
                     <p className="mt-2 text-center text-base leading-5 text-gray-600">
                         Or{' '}
-                        <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                        <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
                             register
-                        </a>
+                        </Link>
                     </p>
                 </div>
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                    <form className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10" action="#" method="POST">
+                    <form className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10" action="#" method="POST" onSubmit={handleSubmit}>
                         <div className="-space-y-px rounded-md">
-                            <div className="mb-8">
+                        <div className="mb-6">
                                 <label htmlFor="email-address" className="block text-sm font-medium leading-5 mb-1 text-gray-700 text-left">
-                                    Email
+                                    E-mail
                                 </label>
                                 <input
                                     id="email-address"
                                     name="email"
                                     type="email"
                                     autoComplete="email"
-                                    required
-                                    className="form-input block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 border-red-500 w-full"
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    onBlur={handleInputBlur}
+                                    className={`form-input block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue  transition duration-150 ease-in-out sm:text-sm sm:leading-5 ${validattionMessage.email ? "border-red-500":"focus:border-blue-300"} w-full`}
                                 />
-                                <p class="text-red-500 text-xs text-left">This field is mandatory
+                                <p class="text-red-500 text-xs text-left">{validattionMessage.email}
                                 </p>
                             </div>
+                           
                             <div className="">
                                 <label htmlFor="password" className="block text-sm font-medium leading-5 text-gray-700 text-left">
                                     Password
@@ -45,13 +97,16 @@ export function LoginPage() {
                                 <input
                                     id="password"
                                     name="password"
+                                    onChange={handleChange}
+                                    value={values.password}
+                                    onBlur={handleInputBlur}
+                                    className={`form-input block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue  transition duration-150 ease-in-out sm:text-sm sm:leading-5 ${validattionMessage.password ? "border-red-500":"focus:border-blue-300"} w-full`}
+
                                     type="password"
                                     autoComplete="current-password"
-                                    required
-                                    className="form-input block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 border-red-500 w-full"
 
                                 />
-                                <p class="text-red-500 text-xs text-left">This field is mandatory
+                                <p class="text-red-500 text-xs text-left">{validattionMessage.password}
                                 </p>
 
                             </div>
@@ -76,6 +131,5 @@ export function LoginPage() {
                     </form>
                 </div>
             </div>
-        </div>
     )
 } 
